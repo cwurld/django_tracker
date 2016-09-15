@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+    <style type="text/css">
+        td, th {padding: 3px;}
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+    <h1>Stats Selector</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" name="submit" value="Go">
+    </form>
+{% endblock content %}

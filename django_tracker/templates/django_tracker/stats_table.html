@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+    <style type="text/css">
+        td, th {padding: 3px;}
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+    <h1>Tracker Stats</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Datetime</th>
+                <th>URL</th>
+                <th>User</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

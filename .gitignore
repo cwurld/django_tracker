@@ -1,0 +1,18 @@
+# Created by .gitignore support plugin (hsz.mobi)
+*.sqlite
+
+documents
+
+/static/media/tracker/*.dat
+/README.html
+
+/.idea
+/tracker_demo/test_project/tracker_demo.sqlite
+
+*.egg-info
+*.pot
+*.py[co]
+.tox/
+__pycache__
+MANIFEST
+dist/

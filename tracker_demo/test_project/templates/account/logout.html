@@ -1,0 +1,19 @@
+{% extends 'account/base.html' %}
+{% load i18n %}
+{% load account %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "Logout" %}{% endblock %}
+
+{% block content %}
+<h1>Sign Out</h1>
+
+<p>Are you sure you want to sign out?</p>
+
+<form method="POST" action="/accounts/logout/" role="form" >
+    {% csrf_token %}
+
+    <button class="primaryAction btn btn-lg btn-primary btn-block" type="submit">{% trans "Sign Out" %}</button>
+</form>
+{% endblock %}
