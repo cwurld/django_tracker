@@ -45,9 +45,9 @@ class TrackerManager(object):
         else:
             user = request.user.email or request.user.username
 
-        now = timezone.now()
-        fname = os.path.join(tracker_dir, str(now.today()) + '.dat')
+        now = timezone.localtime(timezone.now())
+        fname = os.path.join(tracker_dir, str(now.date()) + '.dat')
         fp = codecs.open(fname, 'ab', 'utf-8')
         writer = csv.writer(fp)
-        writer.writerow([now, request.path, user, ip])
+        writer.writerow([now.strftime('%Y-%m-%d %H:%M:%S'), request.path, user, ip])
         fp.close()

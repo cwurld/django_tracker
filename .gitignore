@@ -7,7 +7,6 @@ documents
 /README.html
 
 /.idea
-/tracker_demo/test_project/tracker_demo.sqlite
 
 *.egg-info
 *.pot

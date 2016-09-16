@@ -15,6 +15,7 @@ class StatsSelectorForm(forms.Form):
         super(StatsSelectorForm, self).__init__(*args, **kwargs)
         users = User.objects.filter(is_superuser=False).order_by('email').values_list('email', flat=True)
         self.fields['user'].choices = [['all', 'All']] + \
+            [['anonymous', 'Anonymous']] + \
             [[email, email] for email in users]
 
     def clean(self):

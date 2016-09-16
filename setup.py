@@ -1,8 +1,5 @@
-__author__ = 'Chuck Martin'
-
 import os
 from setuptools import setup
-import roi_crm
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
@@ -11,14 +8,14 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='roi_crm',
-    version=roi_crm.__version__,
-    packages=['roi_crm'],
+    name='django_tracker',
+    version='0.0.1',
+    packages=[],
     include_package_data=True,
-    license='All rights reserved by ROI Technologies LLC',
-    description='A simple CRM app for Django',
+    license='MIT License',
+    description='A simple tracker for Django',
     long_description=README,
-    author='Charles Martin',
+    author='Chuck Martin',
     author_email='chuck.martin@roitechnologies.net',
     classifiers=[
         'Environment :: Web Environment',
