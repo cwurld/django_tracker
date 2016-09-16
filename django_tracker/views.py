@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import FormView
@@ -10,7 +11,7 @@ import forms
 
 import dateutil.parser
 
-from utils import read_tracker_file
+from utils import read_tracker_file, histogram_one_day
 
 
 STATS_SELECTOR_SESSION_KEY = 'STATS_SELECTOR_SESSION_KEY'
@@ -36,32 +37,69 @@ class StatsSelector(FormView):
         params['stop_date'] = str(params['stop_date'])
         self.request.session[STATS_SELECTOR_SESSION_KEY] = params
 
-        return HttpResponseRedirect(reverse('django_tracker:stats_table'))
+        if params['format'] == 'table':
+            return HttpResponseRedirect(reverse('django_tracker:stats_table'))
+        elif params['format'] == 'histogram':
+            return HttpResponseRedirect(reverse('django_tracker:stats_histogram'))
+        else:
+            return HttpResponseRedirect('/')
 
 
-class StatsTable(TemplateView):
+class StatsDisplayMixin(object):
+    def get_context_data(self, **kwargs):
+        kwargs = super(StatsDisplayMixin, self).get_context_data(**kwargs)
+        selector = self.request.session[STATS_SELECTOR_SESSION_KEY]
+        selector['start_date'] = dateutil.parser.parse(selector['start_date']).date()
+        selector['stop_date'] = dateutil.parser.parse(selector['stop_date']).date()
+        if selector['user'] == 'all':
+            kwargs['target_user'] = None
+        else:
+            kwargs['target_user'] = selector['user']
+
+        kwargs['now'] = timezone.now()
+        kwargs['selector'] = selector
+        return kwargs
+
+
+class StatsTable(StatsDisplayMixin, TemplateView):
     template_name = 'django_tracker/stats_table.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(StatsTable, self).get_context_data(**kwargs)
 
-        selector = self.request.session[STATS_SELECTOR_SESSION_KEY]
-        selector['start_date'] = dateutil.parser.parse(selector['start_date']).date()
-        selector['stop_date'] = dateutil.parser.parse(selector['stop_date']).date()
-        if selector['user'] == 'all':
-            target_user = None
-        else:
-            target_user = selector['user']
-        
+        # Load data files from CSV
         kwargs['data'] = []
         done = False
-        the_date = selector['start_date']
+        the_date = kwargs['selector']['start_date']
         while not done:
             kwargs['data'] += read_tracker_file(
-                the_date, exclude_anonymous=selector['exclude_anonymous'], target_user=target_user)
+                the_date, exclude_anonymous=kwargs['selector']['exclude_anonymous'], target_user=kwargs['target_user'])
             the_date += ONE_DAY
-            done = (the_date > selector['stop_date'])
+            done = (the_date > kwargs['selector']['stop_date'])
+        return kwargs
 
-        kwargs['now'] = timezone.now()
-        kwargs['selector'] = selector
+
+class StatsHistogram(StatsDisplayMixin, TemplateView):
+    template_name = 'django_tracker/stats_histogram.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(StatsHistogram, self).get_context_data(**kwargs)
+
+        histogram_y = []
+        histogram_x = []
+        one_day = map(str, range(0, 24))
+        done = False
+        the_date = kwargs['selector']['start_date']
+        while not done:
+            histogram_y += histogram_one_day(
+                the_date,
+                exclude_anonymous=kwargs['selector']['exclude_anonymous'],
+                target_user=kwargs['target_user']
+            )
+            histogram_x += one_day
+            the_date += ONE_DAY
+            done = (the_date > kwargs['selector']['stop_date'])
+
+        kwargs['histogram'] = json.dumps([['Hour', 'Views']] + map(list, zip(histogram_x, histogram_y)))
+        kwargs['histogram_x'] = json.dumps(histogram_x)
         return kwargs

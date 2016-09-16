@@ -1,24 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block extra_css %}
-    <style type="text/css">
-        td, th {padding: 6px; border: solid 1px gray;}
-        table{border: solid 1px gray; margin-bottom: 10px;}
-        .s_label{font-weight: bold;}
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
     <h1>Tracker Stats</h1>
-    <p><a href="{% url 'django_tracker:stats_selector' %}">back to selector</a></p>
-
-    <p>
-        <span class="s_label">Start:</span> {{ selector.start_date|date:"Y-m-d" }} &nbsp; &nbsp;
-        <span class="s_label">Stop:</span> {{ selector.stop_date|date:"Y-m-d" }} &nbsp; &nbsp;
-        <span class="s_label">User:</span> {{ selector.user }} &nbsp; &nbsp;
-        <span class="s_label">Exclude Anonymous: </span> {{ selector.exclude_anonymous }} &nbsp; &nbsp;
-    </p>
-    <p>Current time: {{ now|date:"Y-m-d H:i:s"}}</p>
+    {% include 'django_tracker/selector_include.html' %}
 
     <table>
         <thead>

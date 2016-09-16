@@ -9,7 +9,7 @@ class StatsSelectorForm(forms.Form):
     stop_date = forms.DateField(widget=SelectDateWidget)
     user = forms.ChoiceField()
     exclude_anonymous = forms.BooleanField(required=False)
-    format = forms.ChoiceField(choices=[['table', 'Table']])
+    format = forms.ChoiceField(choices=[['table', 'Table'], ['histogram', 'Histogram']])
 
     def __init__(self, *args, **kwargs):
         super(StatsSelectorForm, self).__init__(*args, **kwargs)

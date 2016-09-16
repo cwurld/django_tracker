@@ -20,7 +20,7 @@ class TrackerManager(object):
             return
 
         # Exclude some files based on url
-        url_excludes = [r'/tracker', ]
+        url_excludes = [r'/django_tracker', ]
         for x in url_excludes:
             if x in request.path:
                 return

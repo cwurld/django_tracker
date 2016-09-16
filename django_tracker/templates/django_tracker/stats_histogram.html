@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_js %}
+    <!--suppress JSUnresolvedLibraryURL -->
+    <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        /**
+         * @external google
+         * @param google.charts
+         * @param google.charts.setOnLoadCallback
+         */
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable({{ histogram|safe }});
+
+            var options = {
+                title: 'Page Views by Hour',
+                legend: {position: 'none'},
+                hAxis: {
+                    title: "Hour of Day",
+                    showTextEvery: 2
+                }
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
+    <style type="text/css">
+        .chart {
+            width: 100%;
+            min-height: 450px;
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+    <h1>Tracker Stats</h1>
+    {% include 'django_tracker/selector_include.html' %}
+
+    <div class="col-md-12">
+        <div id="chart_div" class="chart"></div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_js %}{% endblock extra_js %}

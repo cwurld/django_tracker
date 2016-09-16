@@ -29,8 +29,8 @@ def read_tracker_file(the_date, exclude_anonymous=False, target_user=None):
     return rows
 
 
-def histogram_one_day(the_date):
-    rows = read_tracker_file(the_date)
+def histogram_one_day(the_date, **kwargs):
+    rows = read_tracker_file(the_date, **kwargs)
     if rows is None:
         return None
 
