@@ -39,7 +39,7 @@ Installation
 
 Django Tracker Views (e.g. stats pages)
 ---------------------------------------
-The django_tracker views are restricted to superusers.
+The django_tracker views are restricted to superusers and users in the "django_tracker" Django group.
 
 
 Tracker Demo

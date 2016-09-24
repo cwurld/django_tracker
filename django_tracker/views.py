@@ -7,6 +7,8 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
+from braces.views import GroupRequiredMixin
+
 import forms
 
 import dateutil.parser
@@ -18,9 +20,11 @@ STATS_SELECTOR_SESSION_KEY = 'STATS_SELECTOR_SESSION_KEY'
 ONE_DAY = datetime.timedelta(1)
 
 
-class StatsSelector(FormView):
+class StatsSelector(GroupRequiredMixin, FormView):
     form_class = forms.StatsSelectorForm
     template_name = 'django_tracker/stats_selector.html'
+    group_required = u'django_tracker'
+    raise_exception = True
 
     def get_initial(self):
         now = timezone.localtime(timezone.now()).date()
@@ -45,7 +49,10 @@ class StatsSelector(FormView):
             return HttpResponseRedirect('/')
 
 
-class StatsDisplayMixin(object):
+class StatsDisplayMixin(GroupRequiredMixin):
+    group_required = u'django_tracker'
+    raise_exception = True
+
     def get_context_data(self, **kwargs):
         kwargs = super(StatsDisplayMixin, self).get_context_data(**kwargs)
         selector = self.request.session[STATS_SELECTOR_SESSION_KEY]
