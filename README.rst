@@ -21,7 +21,7 @@ It tracks by email address, so each user should have an email address.
 Installation
 ------------
 
-1. Add to INSTALLED_APPS::
+1. Add to INSTALLED_APPS in settings::
 
     INSTALLED_APPS = (
         ...
@@ -29,7 +29,7 @@ Installation
         ...
     )
 
-2. Add to MIDDLEWARE::
+2. Add to MIDDLEWARE in settings::
 
     MIDDLEWARE_CLASSES = (
         ...
@@ -37,7 +37,24 @@ Installation
         ...
     )
 
-3. Add "django_tracker" to Django groups. I do that using Django Admin.
+3. Make sure you have this line in your TEMPLATE_CONTEXT_PROCESSORS in settings::
+
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        ...
+        'django.core.context_processors.request',
+        ...
+    )
+
+4. Add pattern to url patterns::
+
+    urlpatterns = patterns(
+        '',
+        ...
+        url(r'^django_tracker/', include('django_tracker.urls', namespace='django_tracker')),
+        ...
+    )
+
+5. If you want users who are not superusers to be able to see the stats, then add "django_tracker" to Django groups. I do that using Django Admin.
 
 
 Django Tracker Views (e.g. stats pages)
@@ -53,12 +70,11 @@ template filter::
     {% load django_tracker_tags %}
     ...
 
-    {% if view|show_django_tracker %}
+    {% if request|show_django_tracker %}
         <li><a href="{% url 'django_tracker:stats_selector' %}">Tracker</a></li>
     {% endif %}
 
-Where "view" is the context variable provided by most Django Class Based Views (CBV). If you are not using CBV, you will need to provide this context variable. If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
-
+Where "request" is the context variable provided by 'django.core.context_processors.request'. If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
 
 
 Tracker Demo

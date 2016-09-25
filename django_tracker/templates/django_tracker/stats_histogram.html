@@ -42,11 +42,13 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <h1>Tracker Stats</h1>
-    {% include 'django_tracker/selector_include.html' %}
+    <div class="container">
+        <h1>Tracker Stats</h1>
+        {% include 'django_tracker/selector_include.html' %}
 
-    <div class="col-md-12">
-        <div id="chart_div" class="chart"></div>
+        <div class="col-md-12">
+            <div id="chart_div" class="chart"></div>
+        </div>
     </div>
 {% endblock content %}
 

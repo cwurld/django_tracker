@@ -6,32 +6,34 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <h1>Tracker Stats</h1>
-    {% include 'django_tracker/selector_include.html' %}
+    <div class="container">
+        <h1>Tracker Stats</h1>
+        {% include 'django_tracker/selector_include.html' %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Datetime</th>
-                <th>URL</th>
-                <th>User</th>
-                <th>IP Address</th>
-            </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>Datetime</th>
+                    <th>URL</th>
+                    <th>User</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            {% for row in data %}
-                <tr>
-                    <td>{{ row.0 }}</td>
-                    <td>{{ row.1 }}</td>
-                    <td>{{ row.2 }}</td>
-                    <td>{{ row.3 }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">No data</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        <td>{{ row.0 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.2 }}</td>
+                        <td>{{ row.3 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No data</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}
