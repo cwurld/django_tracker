@@ -2,8 +2,6 @@
 Django Tracker
 ==============
 
-**Warning: this code is not even alpha yet. **
-
 Uses Django middleware to record page views, by user. This app is intended for Django sites, that are:
 
 #. used by authorized (e.g. logged in) users. If the users are not authorized, then you are better off using your server log file to track page views
@@ -15,7 +13,7 @@ The results are written to CSV files in settings.MEDIA_PATH/tracker. A new one d
 
 Also, for my uses, the data is not used very often, so the overhead of parsing the CSV file(s) it and possibly filtering it is not a problem.
 
-The tracker does NOT track super users.
+**The tracker does NOT track super users.**
 
 It tracks by email address, so each user should have an email address.
 
@@ -23,23 +21,44 @@ It tracks by email address, so each user should have an email address.
 Installation
 ------------
 
-1. Add to INSTALLED_APPS:
+1. Add to INSTALLED_APPS::
 
     INSTALLED_APPS = (
         ...
         'django_tracker',
+        ...
     )
 
-2. Add to MIDDLEWARE:
+2. Add to MIDDLEWARE::
 
     MIDDLEWARE_CLASSES = (
         ...
         'django_tracker.tracker_middleware.TrackerManager'
+        ...
     )
+
+3. Add "django_tracker" to Django groups. I do that using Django Admin.
+
 
 Django Tracker Views (e.g. stats pages)
 ---------------------------------------
 The django_tracker views are restricted to superusers and users in the "django_tracker" Django group.
+
+
+Django Tracker in Templates
+---------------------------
+If you want to make template content depend on whether or not a user is permitted to see the tracker stats, use this
+template filter::
+
+    {% load django_tracker_tags %}
+    ...
+
+    {% if view|show_django_tracker %}
+        <li><a href="{% url 'django_tracker:stats_selector' %}">Tracker</a></li>
+    {% endif %}
+
+Where "view" is the context variable provided by most Django Class Based Views (CBV). If you are not using CBV, you will need to provide this context variable. If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
+
 
 
 Tracker Demo
@@ -48,6 +67,6 @@ Tracker demo is a minimal Django project for testing and showing the functionali
 
     python manage.py make_tracker_demo_data
 
-This creates some users along with passwords. Look at the code django_tracker/management/commands/make_tracker_demo_data.py for details. You can login with any of these users and then see the results in the tracker files.
+This creates some users along with passwords. Look at the code /django_tracker/management/commands/make_tracker_demo_data.py for details. You can login with any of these users and then see the results in the tracker files.
 
 "demo_app" is for simulating a project with multiple apps.

@@ -110,7 +110,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.request',  # Required by allauth
             ],
-            'debug': False
+            'debug': True
         },
     },
 ]
