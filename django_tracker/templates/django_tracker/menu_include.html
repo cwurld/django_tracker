@@ -1,0 +1,13 @@
+{% load django_tracker_tags %}
+
+<!--
+Where "request" is the context variable provided by 'django.core.context_processors.request'.
+If you are wondering about the somewhat odd form of this code, see:
+
+http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false
+
+-->
+{% if request|show_django_tracker %}
+    <li role="separator" class="divider"></li>
+    <li><a href="{% url 'django_tracker:stats_selector' %}">Tracker</a></li>
+{% endif %}

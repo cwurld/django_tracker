@@ -21,7 +21,7 @@ It tracks by email address, so each user should have an email address.
 Installation
 ------------
 
-1. Add to INSTALLED_APPS in settings::
+#. Add to INSTALLED_APPS in settings::
 
     INSTALLED_APPS = (
         ...
@@ -29,7 +29,7 @@ Installation
         ...
     )
 
-2. Add to MIDDLEWARE in settings::
+#. Add to MIDDLEWARE in settings::
 
     MIDDLEWARE_CLASSES = (
         ...
@@ -37,7 +37,7 @@ Installation
         ...
     )
 
-3. Make sure you have this line in your TEMPLATE_CONTEXT_PROCESSORS in settings::
+#. Make sure you have this line in your TEMPLATE_CONTEXT_PROCESSORS in settings::
 
     TEMPLATE_CONTEXT_PROCESSORS = (
         ...
@@ -45,7 +45,7 @@ Installation
         ...
     )
 
-4. Add pattern to url patterns::
+#. Add pattern to url patterns::
 
     urlpatterns = patterns(
         '',
@@ -54,7 +54,7 @@ Installation
         ...
     )
 
-5. If you want users who are not superusers to be able to see the stats, then add "django_tracker" to Django groups. I do that using Django Admin.
+#. If you want users who are not superusers to be able to see the stats, then add "django_tracker" to Django groups. I do that using Django Admin.
 
 
 Django Tracker Views (e.g. stats pages)
@@ -64,17 +64,19 @@ The django_tracker views are restricted to superusers and users in the "django_t
 
 Django Tracker in Templates
 ---------------------------
-If you want to make template content depend on whether or not a user is permitted to see the tracker stats, use this
-template filter::
+To put this in an HTML list (e.g. a bootstrap navbar dropdown), you can use this template include::
+
+    {% include 'django_tracker/menu_include.html' %}
+
+For more fine-grained control, there is a template filter that can be used to only show a link to the tracker to users who are permitted to see it::
 
     {% load django_tracker_tags %}
-    ...
 
     {% if request|show_django_tracker %}
-        <li><a href="{% url 'django_tracker:stats_selector' %}">Tracker</a></li>
+        <a href="{% url 'django_tracker:stats_selector' %}">Tracker</a>
     {% endif %}
 
-Where "request" is the context variable provided by 'django.core.context_processors.request'. If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
+If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
 
 
 Tracker Demo
