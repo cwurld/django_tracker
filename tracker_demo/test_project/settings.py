@@ -1,6 +1,7 @@
 # Django settings for test_project project.
 from __future__ import absolute_import
 import os.path
+import django
 
 
 SITE_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -94,26 +95,48 @@ SECRET_KEY = '$!6tj%wfdhfd43534h7751up=6%o_z$)k85d$s(vqt9kk21d4)'
 
 
 # ######### TEMPLATE CONFIGURATION
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.debug',
-                'django.core.context_processors.i18n',
-                'django.core.context_processors.media',
-                'django.core.context_processors.static',
-                'django.core.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.request',  # Required by allauth
-            ],
-            'debug': True
+if django.VERSION <= (1, 8):
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.contrib.auth.context_processors.auth',
+                    'django.core.context_processors.debug',
+                    'django.core.context_processors.i18n',
+                    'django.core.context_processors.media',
+                    'django.core.context_processors.static',
+                    'django.core.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                    'django.core.context_processors.request',  # Required by allauth
+                ],
+                'debug': True
+            },
         },
-    },
-]
+    ]
+else:
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                    'django.template.context_processors.request',  # Required by allauth
+                ],
+                'debug': True
+            },
+        },
+    ]
 
 
 MIDDLEWARE_CLASSES = (
