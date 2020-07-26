@@ -1,0 +1,3 @@
+This app is to make "tracker_demo" a multi-app project.
+
+It is not needed by the "django_tracker" app.

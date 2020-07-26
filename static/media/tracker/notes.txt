@@ -1,0 +1,1 @@
+To stop Git from removing this directory tree. This is only needed for tracker_demo.

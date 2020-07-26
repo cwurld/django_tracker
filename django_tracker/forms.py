@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
 
 
 class StatsSelectorForm(forms.Form):

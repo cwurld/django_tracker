@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Generate demo data'
 
     def handle(self, *args, **options):
-        group = Group.objects.create('django_tracker')
+        group = Group.objects.create(name='django_tracker')
 
         # A user that just generates page views
         User.objects.create_user('user1', 'user1@test.com', 'test')

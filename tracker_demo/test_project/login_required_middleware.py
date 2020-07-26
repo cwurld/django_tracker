@@ -3,16 +3,22 @@ from django.http import HttpResponseRedirect
 
 import re
 
+# Make re patterns
+URLS = tuple([re.compile(url) for url in settings.LOGIN_NOT_REQUIRED_URLS])
+
 
 class RequireLoginMiddleware(object):
-    def __init__(self):
-        # Make re patterns
-        self.urls = tuple([re.compile(url) for url in settings.LOGIN_NOT_REQUIRED_URLS])
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-    def process_request(self, request):
-        for url in self.urls:
+    def __call__(self, request):
+        response = self.get_response(request)
+
+        for url in URLS:
             if url.match(request.path):
-                return
+                return response
 
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        return response

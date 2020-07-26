@@ -7,27 +7,32 @@ from django.utils import timezone
 
 
 # noinspection PyMethodMayBeStatic
-class TrackerManager(object):
-    def process_request(self, request):
+class TrackerManager:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+
         # Exclude super users
         if request.user.is_superuser:
-            return
+            return response
 
         # Exclude some files based on the file ext
         root, ext = os.path.splitext(request.path)
         ext_list = ['.css', '.jpg', '.gif', '.png', '.js', '.ico']
         if ext in ext_list:
-            return
+            return response
 
         # Exclude some files based on url
         url_excludes = [r'/django_tracker', ]
         for x in url_excludes:
             if x in request.path:
-                return
+                return response
 
         # Ignore ajax interactions
         if 'xhr' in request.GET:
-            return
+            return response
 
         tracker_dir = os.path.join(settings.MEDIA_ROOT, 'tracker')
         if not os.path.exists(tracker_dir):
@@ -40,14 +45,16 @@ class TrackerManager(object):
         else:
             ip = request.META['REMOTE_ADDR']
 
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             user = 'anonymous'
         else:
             user = request.user.email or request.user.username
 
         now = timezone.localtime(timezone.now())
-        fname = os.path.join(tracker_dir, str(now.date()) + '.dat')
-        fp = codecs.open(fname, 'ab', 'utf-8')
+        file_path = os.path.join(tracker_dir, str(now.date()) + '.dat')
+        fp = codecs.open(file_path, 'ab', 'utf-8')
         writer = csv.writer(fp)
         writer.writerow([now.strftime('%Y-%m-%d %H:%M:%S'), request.path, user, ip])
         fp.close()
+
+        return response

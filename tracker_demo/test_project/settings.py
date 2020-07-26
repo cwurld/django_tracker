@@ -19,8 +19,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(SITE_PATH, 'tracker_demo.sqlite'),  # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(SITE_PATH, 'tracker_demo.sqlite'),
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -95,56 +95,35 @@ SECRET_KEY = '$!6tj%wfdhfd43534h7751up=6%o_z$)k85d$s(vqt9kk21d4)'
 
 
 # ######### TEMPLATE CONFIGURATION
-if django.VERSION <= (1, 8):
-    TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
-            'APP_DIRS': True,
-            'OPTIONS': {
-                'context_processors': [
-                    'django.contrib.auth.context_processors.auth',
-                    'django.core.context_processors.debug',
-                    'django.core.context_processors.i18n',
-                    'django.core.context_processors.media',
-                    'django.core.context_processors.static',
-                    'django.core.context_processors.tz',
-                    'django.contrib.messages.context_processors.messages',
-                    'django.core.context_processors.request',  # Required by allauth
-                ],
-                'debug': True
-            },
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',  # Required by allauth
+            ],
+            'debug': True
         },
-    ]
-else:
-    TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [os.path.normpath(os.path.join(SITE_PATH, 'templates'))],
-            'APP_DIRS': True,
-            'OPTIONS': {
-                'context_processors': [
-                    'django.contrib.auth.context_processors.auth',
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.i18n',
-                    'django.template.context_processors.media',
-                    'django.template.context_processors.static',
-                    'django.template.context_processors.tz',
-                    'django.contrib.messages.context_processors.messages',
-                    'django.template.context_processors.request',  # Required by allauth
-                ],
-                'debug': True
-            },
-        },
-    ]
+    },
+]
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'tracker_demo.test_project.login_required_middleware.RequireLoginMiddleware',
     'django_tracker.tracker_middleware.TrackerManager'
 )
@@ -181,7 +160,7 @@ INSTALLED_APPS = (
     'allauth',       # http://django-allauth.readthedocs.org/en/latest/#requirements
     'allauth.account',
     'allauth.socialaccount',
-    'demo_app',
+    'another_app',
     'django_tracker',
 )
 

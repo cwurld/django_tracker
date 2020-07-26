@@ -4,16 +4,16 @@ import json
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 
 from braces.views import GroupRequiredMixin
 
-import forms
+import django_tracker.forms as forms
 
 import dateutil.parser
 
-from utils import read_tracker_file, histogram_one_day
+from django_tracker.utils import read_tracker_file, histogram_one_day
 
 
 STATS_SELECTOR_SESSION_KEY = 'STATS_SELECTOR_SESSION_KEY'
@@ -107,6 +107,6 @@ class StatsHistogram(StatsDisplayMixin, TemplateView):
             the_date += ONE_DAY
             done = (the_date > kwargs['selector']['stop_date'])
 
-        kwargs['histogram'] = json.dumps([['Hour', 'Views']] + map(list, zip(histogram_x, histogram_y)))
+        kwargs['histogram'] = json.dumps([['Hour', 'Views']] + list(map(list, zip(histogram_x, histogram_y))))
         kwargs['histogram_x'] = json.dumps(histogram_x)
         return kwargs

@@ -23,4 +23,12 @@
 
     <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Set/Reset Password" %}</a>
 </form>
+
+    <p style="margin-top: 2rem;">Here are some emails and passwords you can use:</p>
+
+    <ul>
+        <li>Superuser:  su@test.com, test</li>
+        <li>Ordinary User: user1@test.com, test</li>
+        <li>User that can view tracker: user2@test.com, test</li>
+    </ul>
 {% endblock %}
