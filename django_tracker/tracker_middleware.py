@@ -14,6 +14,9 @@ class TrackerManager:
     def __call__(self, request):
         response = self.get_response(request)
 
+        if response.status_code == 302:
+            return response
+
         # Exclude super users
         if request.user.is_superuser:
             return response

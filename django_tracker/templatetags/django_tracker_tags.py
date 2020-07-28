@@ -1,4 +1,6 @@
 from django import template
+from django.conf import settings
+
 
 register = template.Library()
 
@@ -8,10 +10,11 @@ register = template.Library()
 def show_django_tracker(request):
     if not request:
         return False
-
-    if hasattr(request, 'user'):
-        # Django 1.8 and lower
-        user = request.user
-    else:
-        user = request.request.user
+    user = request.request.user
     return user.is_superuser or user.groups.filter(name='django_tracker').exists()
+
+
+@register.simple_tag()
+def geo_locate(ip):
+    geo = settings.GEO_LOCATE_FUNC(ip)
+    return geo

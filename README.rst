@@ -92,3 +92,5 @@ Next run:
 This creates some users along with passwords. Look at the code /django_tracker/management/commands/make_tracker_demo_data.py for details. You can login with any of these users and then see the results in the tracker files.
 
 "another_app" is for simulating a project with multiple apps.
+
+If you want to geo locate anonymous users, you will need to add the setting: IPINFO_TOKEN. You can get the token from ipinfo.io.

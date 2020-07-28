@@ -1,9 +1,10 @@
-<p><a href="{% url 'django_tracker:stats_selector' %}">back to selector</a></p>
-
 <p>
     <span class="selector_label">Start:</span> {{ selector.start_date|date:"Y-m-d" }} &nbsp; &nbsp;
     <span class="selector_label">Stop:</span> {{ selector.stop_date|date:"Y-m-d" }} &nbsp; &nbsp;
     <span class="selector_label">User:</span> {{ selector.user }} &nbsp; &nbsp;
     <span class="selector_label">Exclude Anonymous: </span> {{ selector.exclude_anonymous }} &nbsp; &nbsp;
+    {% if location %}
+        <span class="selector_label">Location: </span> {{ location }}
+    {% endif %}
 </p>
 <p>Current time: {{ now|date:"Y-m-d H:i:s"}}</p>

@@ -1,7 +1,14 @@
 # Django settings for test_project project.
-from __future__ import absolute_import
 import os.path
 import django
+
+from .secrets import IPINFO_TOKEN
+
+from django_tracker.geo_locate import GeoLocate
+
+geo_locate = GeoLocate(IPINFO_TOKEN)
+
+GEO_LOCATE_FUNC = geo_locate.geo_locate
 
 
 SITE_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -138,6 +145,7 @@ LOGIN_NOT_REQUIRED_URLS = [
     r'^/media/',
     r'/__debug__/',
     r'/accounts/login/',
+    r'/accounts/logout/',
     r'/test_page']
 
 LOGIN_REDIRECT_URL = '/'

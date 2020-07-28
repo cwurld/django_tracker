@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load django_tracker_tags %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
@@ -9,6 +10,7 @@
     <div class="container">
         <h1>Tracker Stats</h1>
         {% include 'django_tracker/selector_include.html' %}
+        <a href="{{ as_histogram_url }}">as histogram</a>
 
         <table>
             <thead>
@@ -17,20 +19,30 @@
                     <th>URL</th>
                     <th>User</th>
                     <th>IP Address</th>
+                    {% if geo_locate %}
+                        <th>Location</th>
+                    {% endif %}
                 </tr>
             </thead>
 
             <tbody>
                 {% for row in data %}
                     <tr>
-                        <td>{{ row.0 }}</td>
-                        <td>{{ row.1 }}</td>
-                        <td>{{ row.2 }}</td>
-                        <td>{{ row.3 }}</td>
+                        <td>{{ row.datetime }}</td>
+                        <td>{{ row.url }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.ip }}</td>
+                        {% if geo_locate %}
+                            <td>{% geo_locate row.ip %}</td>
+                        {% endif %}
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4">No data</td>
+                        {% if geo_locate %}
+                            <td colspan="5">No data</td>
+                        {% else %}
+                            <td colspan="4">No data</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
