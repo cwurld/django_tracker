@@ -1,5 +1,6 @@
 from django import template
-from django.conf import settings
+
+import django_tracker.geo_locate
 
 
 register = template.Library()
@@ -16,5 +17,5 @@ def show_django_tracker(request):
 
 @register.simple_tag()
 def geo_locate(ip):
-    geo = settings.GEO_LOCATE_FUNC(ip)
+    geo = django_tracker.geo_locate.geo_locate(ip)
     return geo

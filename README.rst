@@ -31,19 +31,22 @@ Installation
 
 #. Add to MIDDLEWARE in settings::
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         ...
         'django_tracker.tracker_middleware.TrackerManager'
         ...
     )
 
-#. Make sure you have this line in your TEMPLATE_CONTEXT_PROCESSORS in settings::
+#. Make sure you have this line in your TEMPLATES in settings::
 
-    TEMPLATE_CONTEXT_PROCESSORS = (
+    TEMPLATES = {
         ...
-        'django.core.context_processors.request',
-        ...
-    )
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                ]
+         }
+    }
 
 #. Add pattern to url patterns::
 
@@ -54,7 +57,11 @@ Installation
         ...
     )
 
+#. Add "tracker" folder to settings.MEDIA_ROOT
+
 #. If you want users who are not superusers to be able to see the stats, then add "django_tracker" to Django groups. I do that using Django Admin.
+
+#. The default is to not geo-locate the ip addresses. If you want to use the ipinfo.io geo-locator, then get an access token from them and put it in settings.IPINFO_TOKEN. If you want to provide your own geo-locator, then create a function named "geo_locate" that accepts an ip address and returns the location as a string. Also when the ip address is "help" return a string a non-null string. Set settings.GEO_LOCATE_FUNC to a string that contains the import path to the module with your function.
 
 
 Django Tracker Views (e.g. stats pages)

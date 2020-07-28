@@ -1,12 +1,12 @@
 import os
 
 from django import forms
-from django.contrib.auth.models import User
 
 from django.forms.widgets import SelectDateWidget
 from django.conf import settings
 
 from django_tracker.get_users import get_users
+from django_tracker.geo_locate import geo_locate
 
 
 TRACKER_URL = os.path.join(settings.MEDIA_ROOT, 'tracker')
@@ -43,7 +43,7 @@ class SelectUser(forms.Form):
         if not exclude_anonymous:
             user_choices += [('anonymous-all', 'All Anonymous')]
             for ip in anonymous_users:
-                geo = settings.GEO_LOCATE_FUNC(ip)
+                geo = geo_locate(ip)
                 user_choices.append(('anonymous-{}'.format(ip), 'Anonymous: {} {}'.format(ip, geo)))
 
         for email in users:

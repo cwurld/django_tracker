@@ -17,6 +17,7 @@ import django_tracker.forms as forms
 import dateutil.parser
 
 from django_tracker.utils import read_tracker_file, histogram_one_day
+from django_tracker.geo_locate import geo_locate
 
 
 ONE_DAY = datetime.timedelta(1)
@@ -94,7 +95,7 @@ class StatsDisplayMixin(GroupRequiredMixin):
 
         kwargs['now'] = timezone.now()
         kwargs['selector'] = selector
-        kwargs['geo_locate'] = hasattr(settings, 'GEO_LOCATE_FUNC')
+        kwargs['geo_locate'] = bool(geo_locate('help'))
         kwargs['location'] = ''
 
         qs = self.request.META['QUERY_STRING']
@@ -154,5 +155,5 @@ class StatsHistogram(StatsDisplayMixin, TemplateView):
         if kwargs['selector']['user'].startswith('anonymous'):
             ip = kwargs['selector']['user'].split('-')[1]
             if ip != 'all':
-                kwargs['location'] = settings.GEO_LOCATE_FUNC(ip)
+                kwargs['location'] = geo_locate(ip)
         return kwargs

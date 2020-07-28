@@ -4,12 +4,8 @@ import django
 
 from .secrets import IPINFO_TOKEN
 
-from django_tracker.geo_locate import GeoLocate
-
-geo_locate = GeoLocate(IPINFO_TOKEN)
-
-GEO_LOCATE_FUNC = geo_locate.geo_locate
-
+# This is an example of how to implement your own geo-locator
+# GEO_LOCATE_FUNC = 'tracker_demo.test_project.my_geolocator'
 
 SITE_PATH = os.path.abspath(os.path.dirname(__file__))
 BASE_PATH = os.path.split(os.path.split(SITE_PATH)[0])[0]
