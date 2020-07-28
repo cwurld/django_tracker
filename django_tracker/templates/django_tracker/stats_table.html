@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'django_tracker_base.html' %}
 {% load staticfiles %}
 {% load django_tracker_tags %}
 
@@ -12,7 +12,7 @@
         {% include 'django_tracker/selector_include.html' %}
         <a href="{{ as_histogram_url }}">as histogram</a>
 
-        <table>
+        <table id="id_tracker_table">
             <thead>
                 <tr>
                     <th>Datetime</th>
