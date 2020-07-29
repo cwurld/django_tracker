@@ -81,6 +81,11 @@ class StatsDisplayMixin(GroupRequiredMixin):
     group_required = u'django_tracker'
     raise_exception = True
 
+    def dispatch(self, request, *args, **kwargs):
+        if 'start_date' not in request.GET:
+            return HttpResponseRedirect(reverse('django_tracker:stats_selector'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         kwargs = super(StatsDisplayMixin, self).get_context_data(**kwargs)
         selector = {}
@@ -122,6 +127,7 @@ class StatsTable(StatsDisplayMixin, TemplateView):
             kwargs['data'] += day_data
             the_date += ONE_DAY
             done = (the_date > kwargs['selector']['stop_date'])
+        kwargs['data'].reverse()
         return kwargs
 
 
