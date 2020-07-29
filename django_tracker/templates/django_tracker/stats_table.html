@@ -4,6 +4,17 @@
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
+
+    <style>
+        #id_tracker_table{font-size: smaller; table-layout: fixed; width: 100%}
+        #id_tracker_table td{word-break: break-all;}
+
+        th.datetime{width:180px;}
+        .url_col{width: 300px;}
+        .ip_col{width: 100px;}
+
+
+    </style>
 {% endblock extra_css %}
 
 {% block content %}
@@ -15,10 +26,10 @@
         <table id="id_tracker_table">
             <thead>
                 <tr>
-                    <th>Datetime</th>
-                    <th>URL</th>
+                    <th class="datetime">Datetime</th>
+                    <th class="url_col">URL</th>
                     <th>User</th>
-                    <th>IP Address</th>
+                    <th class="ip_col">IP Address</th>
                     {% if geo_locate %}
                         <th>Location</th>
                     {% endif %}
@@ -29,7 +40,7 @@
                 {% for row in data %}
                     <tr>
                         <td>{{ row.datetime }}</td>
-                        <td>{{ row.url }}</td>
+                        <td class="url_col">{{ row.url }}</td>
                         <td>{{ row.email }}</td>
                         <td>{{ row.ip }}</td>
                         {% if geo_locate %}
