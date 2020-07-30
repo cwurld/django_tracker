@@ -6,13 +6,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
 
     <style>
-        #id_tracker_table{font-size: smaller; width: 100%; min-width: 900px;}
+        #id_tracker_table{font-size: smaller; min-width: 900px;}
         #id_tracker_table td{word-break: break-all;}
 
-        .datetime{width:180px;}
+        .datetime{width:170px;}
         .ip_col{width: 120px;}
-        .location_col{width: 160px;}
-        .user_col{width: 200px;}
+        .url_col{width: 200px;}
+
+
+        @media (min-width: 992px) {
+            .url_col{width: 300px;}
+        }
     </style>
 {% endblock extra_css %}
 
