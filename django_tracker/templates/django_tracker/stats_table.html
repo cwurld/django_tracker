@@ -42,7 +42,14 @@
                         <td>{{ row.datetime }}</td>
                         <td class="url_col">{{ row.url }}</td>
                         <td>{{ row.email }}</td>
-                        <td>{{ row.ip }}</td>
+                        <td>
+                            {% if geo_locate %}
+                                <a onclick="get_details('{{ row.ip }}')">{{ row.ip }}</a>
+                            {% else %}
+                                {{ row.ip }}
+                            {% endif %}
+                        </td>
+
                         {% if geo_locate %}
                             <td>{% geo_locate row.ip %}</td>
                         {% endif %}
@@ -59,4 +66,20 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        var get_details = function(ip){
+            var http = new XMLHttpRequest();
+
+            http.open("POST", "{% url 'django_tracker:get_ip_details' %}", true);
+            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    var data = JSON.parse(http.responseText);
+                    alert(data.details);
+                }
+            }
+            http.send("ip=" + ip);
+        }
+    </script>
 {% endblock content %}

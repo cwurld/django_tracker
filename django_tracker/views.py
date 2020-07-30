@@ -2,13 +2,14 @@ import datetime
 import json
 import os
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
 from django.utils.http import urlencode
+from django.views.decorators.csrf import csrf_exempt
 
 from braces.views import GroupRequiredMixin
 
@@ -17,7 +18,7 @@ import django_tracker.forms as forms
 import dateutil.parser
 
 from django_tracker.utils import read_tracker_file, histogram_one_day
-from django_tracker.geo_locate import geo_locate
+from django_tracker.geo_locate import geo_locate, geo_locate_details
 
 
 ONE_DAY = datetime.timedelta(1)
@@ -163,3 +164,10 @@ class StatsHistogram(StatsDisplayMixin, TemplateView):
             if ip != 'all':
                 kwargs['location'] = geo_locate(ip)
         return kwargs
+
+
+@csrf_exempt
+def get_ip_details(request):
+    ip = request.POST['ip']
+    details = geo_locate_details(ip)
+    return JsonResponse({'details': details})
