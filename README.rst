@@ -69,21 +69,19 @@ Django Tracker Views (e.g. stats pages)
 The django_tracker views are restricted to superusers and users in the "django_tracker" Django group.
 
 
-Django Tracker in Templates
+Django Tracker Templates
 ---------------------------
-To put this in an HTML list (e.g. a bootstrap navbar dropdown), you can use this template include::
+The templates are designed for Bootstrap 4. If you want something different, you take advantage of Django's template loader order and put the directory "django_tracker" into your own project and put the templates you want to over-ride in there. This is cause Django to load your template instead of the default.
 
-    {% include 'django_tracker/menu_include.html' %}
-
-For more fine-grained control, there is a template filter that can be used to only show a link to the tracker to users who are permitted to see it::
+There is a template tag to hide/show a section of a template based on whether or not the user is allowed to see the tracker:
 
     {% load django_tracker_tags %}
 
-    {% if request|show_django_tracker %}
-        <a href="{% url 'django_tracker:stats_selector' %}">Tracker</a>
-    {% endif %}
+    {% if view.request|show_django_tracker %}
 
-If you are wondering about the somewhat odd form of this code, see: `Stackoverflow <http://stackoverflow.com/questions/19998912/django-templatetag-return-true-or-false>`_
+        <a href="{% url 'django_tracker:stats_selector' %}">Tracker</a>
+
+    {% endif %}
 
 
 Tracker Demo

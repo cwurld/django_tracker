@@ -1,6 +1,17 @@
 {% extends 'django_tracker_base.html' %}
+{% load django_tracker_tags %}
 
 {% block content %}
-    <p><a href="{% url 'demo_app:page1' %}">page 1</a></p>
-    <p><a href="{% url 'demo_app:page2' %}">page 2</a></p>
+    <div class="container">
+        <h1>Django Tracker Demo</h1>
+
+        {% if view.request|show_django_tracker %}
+            <p><a href="{% url 'django_tracker:stats_selector' %}">Show Tracker</a></p>
+        {% endif %}
+
+        <ul>
+            <li><a href="{% url 'demo_app:page1' %}">generate page view 1</a></li>
+            <li><a href="{% url 'demo_app:page2' %}">generate page view 2</a></li>
+        </ul>
+    </div>
 {% endblock content %}

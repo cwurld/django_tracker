@@ -6,14 +6,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'django_tracker/django_tracker.css' %}">
 
     <style>
-        #id_tracker_table{font-size: smaller; table-layout: fixed; width: 100%}
+        #id_tracker_table{font-size: smaller; width: 100%; min-width: 900px;}
         #id_tracker_table td{word-break: break-all;}
 
-        th.datetime{width:180px;}
-        .url_col{width: 300px;}
+        .datetime{width:180px;}
         .ip_col{width: 120px;}
-
-
+        .location_col{width: 160px;}
+        .user_col{width: 200px;}
     </style>
 {% endblock extra_css %}
 
@@ -23,48 +22,51 @@
         {% include 'django_tracker/selector_include.html' %}
         <a href="{{ as_histogram_url }}">as histogram</a>
 
-        <table id="id_tracker_table">
-            <thead>
-                <tr>
-                    <th class="datetime">Datetime</th>
-                    <th class="url_col">URL</th>
-                    <th>User</th>
-                    <th class="ip_col">IP Address</th>
-                    {% if geo_locate %}
-                        <th>Location</th>
-                    {% endif %}
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for row in data %}
+        <div class="table-responsive">
+            <table id="id_tracker_table" class="table table-bordered table-sm">
+                <thead>
                     <tr>
-                        <td>{{ row.datetime }}</td>
-                        <td class="url_col">{{ row.url }}</td>
-                        <td>{{ row.email }}</td>
-                        <td>
+                        <th class="datetime">Datetime</th>
+                        <th class="ip_col">IP Address</th>
+
+                        {% if geo_locate %}
+                            <th class="location_col">Location</th>
+                        {% endif %}
+                        <th class="user_col">User</th>
+                        <th class="url_col">URL</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in data %}
+                        <tr>
+                            <td>{{ row.datetime }}</td>
+                            <td>
+                                {% if geo_locate %}
+                                    <a onclick="get_details('{{ row.ip }}')">{{ row.ip }}</a>
+                                {% else %}
+                                    {{ row.ip }}
+                                {% endif %}
+                            </td>
+
                             {% if geo_locate %}
-                                <a onclick="get_details('{{ row.ip }}')">{{ row.ip }}</a>
-                            {% else %}
-                                {{ row.ip }}
+                                <td>{% geo_locate row.ip %}</td>
                             {% endif %}
-                        </td>
-
-                        {% if geo_locate %}
-                            <td>{% geo_locate row.ip %}</td>
-                        {% endif %}
-                    </tr>
+                            <td>{{ row.email }}</td>
+                            <td class="url_col">{{ row.url }}</td>
+                        </tr>
                     {% empty %}
-                    <tr>
-                        {% if geo_locate %}
-                            <td colspan="5">No data</td>
-                        {% else %}
-                            <td colspan="4">No data</td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        <tr>
+                            {% if geo_locate %}
+                                <td colspan="5">No data</td>
+                            {% else %}
+                                <td colspan="4">No data</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
