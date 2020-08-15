@@ -4,7 +4,7 @@ import os
 
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import FormView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
@@ -78,20 +78,33 @@ class StatsSelectUser(GroupRequiredMixin, FormView):
             return HttpResponseRedirect('/')
 
 
+class StatsLast2Days(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        qs = 'past2days=1&exclude_anonymous=False&user=all'
+        return reverse('django_tracker:stats_table') + '?' + qs
+
+
 class StatsDisplayMixin(GroupRequiredMixin):
     group_required = u'django_tracker'
     raise_exception = True
 
     def dispatch(self, request, *args, **kwargs):
-        if 'start_date' not in request.GET:
+        if 'start_date' not in request.GET and 'past2days' not in request.GET:
             return HttpResponseRedirect(reverse('django_tracker:stats_selector'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs = super(StatsDisplayMixin, self).get_context_data(**kwargs)
         selector = {}
-        selector['start_date'] = dateutil.parser.parse(self.request.GET['start_date']).date()
-        selector['stop_date'] = dateutil.parser.parse(self.request.GET['stop_date']).date()
+        if 'past2days' in self.request.GET:
+            now = timezone.localtime(timezone.now())
+            selector['start_date'] = (now - datetime.timedelta(days=1)).date()
+            selector['stop_date'] = now.date()
+        else:
+            selector['start_date'] = dateutil.parser.parse(self.request.GET['start_date']).date()
+            selector['stop_date'] = dateutil.parser.parse(self.request.GET['stop_date']).date()
+
         selector['user'] = self.request.GET['user']
         selector['exclude_anonymous'] = self.request.GET['exclude_anonymous'] == 'True'
         if selector['user'] == 'all':

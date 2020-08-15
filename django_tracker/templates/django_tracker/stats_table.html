@@ -24,7 +24,7 @@
     <div class="container">
         <h1>Tracker Stats</h1>
         {% include 'django_tracker/selector_include.html' %}
-        <a href="{{ as_histogram_url }}">as histogram</a>
+        <p style="font-size: smaller"><a href="{{ as_histogram_url }}">as histogram</a> | <a href="{% url 'django_tracker:stats_selector' %}">go to selector</a></p>
 
         <div class="table-responsive">
             <table id="id_tracker_table" class="table table-bordered table-sm">
