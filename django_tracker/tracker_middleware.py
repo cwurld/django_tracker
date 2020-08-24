@@ -57,7 +57,7 @@ class TrackerManager:
         file_path = os.path.join(tracker_dir, str(now.date()) + '.dat')
         fp = codecs.open(file_path, 'ab', 'utf-8')
         writer = csv.writer(fp)
-        writer.writerow([now.strftime('%Y-%m-%d %H:%M:%S'), request.path, user, ip])
+        writer.writerow([now.strftime('%Y-%m-%d %H:%M:%S'), request.get_full_path(), user, ip])
         fp.close()
 
         return response

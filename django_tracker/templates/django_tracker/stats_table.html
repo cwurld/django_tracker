@@ -57,7 +57,7 @@
                                 <td>{% geo_locate row.ip %}</td>
                             {% endif %}
                             <td>{{ row.email }}</td>
-                            <td class="url_col">{{ row.url }}</td>
+                            <td class="url_col"><a href="{{ row.url }}">{{ row.url }}</a></td>
                         </tr>
                     {% empty %}
                         <tr>
