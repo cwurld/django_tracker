@@ -71,7 +71,9 @@ The django_tracker views are restricted to superusers and users in the "django_t
 
 Django Tracker Templates
 ---------------------------
-The templates are designed for Bootstrap 4. If you want something different, you take advantage of Django's template loader order and put the directory "django_tracker" into your own project and put the templates you want to over-ride in there. This is cause Django to load your template instead of the default.
+The templates are designed for Bootstrap 4. If you want something different, you can take advantage of Django's template loader order and put the directory "django_tracker" into your own project and put the templates you want to over-ride in there. This causes Django to load your template instead of the default.
+
+You will need to create a template called django_tracker_base.html and put it in your templates dir. The only requirement is that it have this block: {% block content %}{% endblock %}
 
 There is a template tag to hide/show a section of a template based on whether or not the user is allowed to see the tracker:
 
